@@ -49,7 +49,7 @@ test_service_unavailable (djangoapp.tests.DealerTests.test_service_unavailable) 
 test_static_and_react_routes (djangoapp.tests.DealerTests.test_static_and_react_routes) ... ok
 
 ----------------------------------------------------------------------
-Ran 19 tests in 0.972s
+Ran 19 tests in 0.955s
 
 OK
 Destroying test database for alias 'default' ('file:memorydb_default?mode=memory&cache=shared')...
