@@ -6,6 +6,7 @@ const dealerships = new Schema({
 	id: {
     type: Number,
     required: true,
+    unique: true,
 	},
 	city: {
     type: String,

@@ -1,0 +1,3 @@
+2026-10-02T11:51:29.147Z MongoMS:MongoInstance Mongo[36981]: stdoutHandler: ""{"t":{"$date":"2026-10-02T14:51:29.147+03:00"},"s":"E",  "c":"CONTROL",  "id":20558,   "ctx":"initandlisten","msg":"std::exception in initAndListen, terminating","attr":{"error":"open: Operation not permitted"}}""
+2026-10-02T11:51:29.151Z MongoMS:MongoMemoryServer Mongo[unknown]: _startUpInstance threw a Error:  UnexpectedCloseError: Instance closed unexpectedly with code "100" and signal "null"
+UnexpectedCloseError: Instance closed unexpectedly with code "100" and signal "null"

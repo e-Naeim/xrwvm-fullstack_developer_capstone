@@ -1,0 +1,17 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> usermgmt@0.1.0 test
+> react-scripts test --watchAll=false --runInBand
+
+PASS src/App.test.jsx
+  ✓ anonymous directory filters Kansas then returns all (92 ms)
+  ✓ authenticated directory shows review actions (15 ms)
+  ✓ register has six fields and blocks mismatched passwords (68 ms)
+  ✓ login Cancel returns to directory (28 ms)
+  ✓ direct anonymous review route returns to login (17 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       5 passed, 5 total
+Snapshots:   0 total
+Time:        1.318 s, estimated 2 s
+Ran all test suites.

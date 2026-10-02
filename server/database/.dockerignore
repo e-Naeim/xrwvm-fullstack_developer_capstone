@@ -1,0 +1,4 @@
+node_modules
+.local-mongo
+.env
+tests

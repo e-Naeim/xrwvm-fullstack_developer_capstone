@@ -1,23 +1,16 @@
-version: '3.9'
-
 services:
-  # Mongodb service
   mongo_db:
-    container_name: db_container
-    image: mongo:latest
-    ports:
-      - 27017:27017
-    restart: always
+    image: mongo:7.0
     volumes:
-      - mongo_data:/data/db
-
-  # Node api service
-  api:
-    image: nodeapp
+      - mongo-data:/data/db
+  nodeapp:
+    build: .
+    environment:
+      MONGO_URL: mongodb://mongo_db:27017/dealershipsDB
     ports:
-      - 3030:3030
-    depends_on: 
+      - "3030:3030"
+    depends_on:
       - mongo_db
-
+    restart: on-failure
 volumes:
-  mongo_data: {}
+  mongo-data:

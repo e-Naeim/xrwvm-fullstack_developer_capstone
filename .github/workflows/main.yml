@@ -1,0 +1,69 @@
+name: Capstone CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  django-and-sentiment:
+    runs-on: ubuntu-latest
+    env:
+      DJANGO_DEBUG: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: server/frontend/package-lock.json
+      - run: pip install -r server/requirements.txt -r server/djangoapp/microservices/requirements.txt flake8
+      - run: npm ci && CI=true npm run build
+        working-directory: server/frontend
+      - run: python manage.py check && python manage.py makemigrations --check --dry-run && python manage.py test djangoapp -v 2
+        working-directory: server
+      - run: python -m unittest -v
+        working-directory: server/djangoapp/microservices
+      - run: flake8 djangoapp djangoproj --exclude=migrations --max-line-length=110 --ignore=E501,W503
+        working-directory: server
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: server/frontend/package-lock.json
+      - run: npm ci
+        working-directory: server/frontend
+      - run: CI=true npm test -- --watchAll=false --runInBand
+        working-directory: server/frontend
+      - run: CI=true npm run build
+        working-directory: server/frontend
+  express-mongodb:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: server/database/package-lock.json
+      - run: npm ci
+        working-directory: server/database
+      - run: npm test
+        working-directory: server/database
+      - run: node tests/mongo.integration.js
+        working-directory: server/database
+  container-builds:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t capstone-web:test server
+      - run: docker build -t capstone-database:test server/database
+      - run: docker build -t capstone-sentiment:test server/djangoapp/microservices

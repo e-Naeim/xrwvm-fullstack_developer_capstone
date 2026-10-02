@@ -1,0 +1,7 @@
+**/node_modules
+**/.local-mongo
+**/__pycache__
+**/.env
+**/db.sqlite3
+frontend/build
+static

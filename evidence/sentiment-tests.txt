@@ -1,0 +1,9 @@
+test_negative (test_sentiment.SentimentTests.test_negative) ... ok
+test_neutral (test_sentiment.SentimentTests.test_neutral) ... ok
+test_overlong (test_sentiment.SentimentTests.test_overlong) ... ok
+test_positive (test_sentiment.SentimentTests.test_positive) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.021s
+
+OK

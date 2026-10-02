@@ -1,0 +1,165 @@
+# Replace YOUR_REGISTRY and create the capstone-secrets Secret before applying.
+# No live deployment is implied by these manifests.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: dealership-mongo
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dealership-mongo
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: dealership-mongo}
+  template:
+    metadata:
+      labels: {app: dealership-mongo}
+    spec:
+      containers:
+        - name: mongo
+          image: mongo:7.0
+          ports: [{containerPort: 27017}]
+          volumeMounts: [{name: data, mountPath: /data/db}]
+          resources:
+            requests: {cpu: 100m, memory: 256Mi}
+            limits: {cpu: 500m, memory: 512Mi}
+      volumes:
+        - name: data
+          persistentVolumeClaim: {claimName: dealership-mongo}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+spec:
+  selector: {app: dealership-mongo}
+  ports: [{port: 27017, targetPort: 27017}]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dealership-database
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: dealership-database}
+  template:
+    metadata:
+      labels: {app: dealership-database}
+    spec:
+      containers:
+        - name: database
+          image: YOUR_REGISTRY/capstone-database:latest
+          ports: [{containerPort: 3030}]
+          env:
+            - {name: MONGO_URL, value: "mongodb://mongo:27017/dealershipsDB"}
+          readinessProbe:
+            httpGet: {path: /, port: 3030}
+          resources:
+            requests: {cpu: 100m, memory: 128Mi}
+            limits: {cpu: 500m, memory: 256Mi}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: database
+spec:
+  selector: {app: dealership-database}
+  ports: [{port: 3030, targetPort: 3030}]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dealership-sentiment
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: dealership-sentiment}
+  template:
+    metadata:
+      labels: {app: dealership-sentiment}
+    spec:
+      containers:
+        - name: sentiment
+          image: YOUR_REGISTRY/capstone-sentiment:latest
+          ports: [{containerPort: 5050}]
+          readinessProbe:
+            httpGet: {path: /, port: 5050}
+          resources:
+            requests: {cpu: 100m, memory: 128Mi}
+            limits: {cpu: 500m, memory: 512Mi}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sentiment
+spec:
+  selector: {app: dealership-sentiment}
+  ports: [{port: 5050, targetPort: 5050}]
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: dealership-django
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dealership-web
+spec:
+  replicas: 1
+  strategy: {type: Recreate}
+  selector:
+    matchLabels: {app: dealership-web}
+  template:
+    metadata:
+      labels: {app: dealership-web}
+    spec:
+      containers:
+        - name: web
+          image: YOUR_REGISTRY/capstone-web:latest
+          ports: [{containerPort: 8000}]
+          env:
+            - {name: DJANGO_DEBUG, value: "0"}
+            - {name: DJANGO_DB_PATH, value: /data/db.sqlite3}
+            - {name: backend_url, value: "http://database:3030"}
+            - {name: sentiment_analyzer_url, value: "http://sentiment:5050"}
+            - name: DJANGO_SECRET_KEY
+              valueFrom:
+                secretKeyRef: {name: capstone-secrets, key: django-secret-key}
+            - name: DJANGO_ALLOWED_HOSTS
+              valueFrom:
+                configMapKeyRef: {name: capstone-config, key: allowed-hosts}
+            - name: DJANGO_CSRF_TRUSTED_ORIGINS
+              valueFrom:
+                configMapKeyRef: {name: capstone-config, key: csrf-trusted-origins}
+          volumeMounts: [{name: data, mountPath: /data}]
+          readinessProbe:
+            httpGet: {path: /, port: 8000, httpHeaders: [{name: Host, value: localhost}]}
+            initialDelaySeconds: 15
+          resources:
+            requests: {cpu: 100m, memory: 256Mi}
+            limits: {cpu: 1000m, memory: 512Mi}
+      volumes:
+        - name: data
+          persistentVolumeClaim: {claimName: dealership-django}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dealership-web
+spec:
+  selector: {app: dealership-web}
+  ports: [{port: 8000, targetPort: 8000}]

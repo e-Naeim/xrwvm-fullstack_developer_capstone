@@ -1,0 +1,57 @@
+Creating test database for alias 'default' ('file:memorydb_default?mode=memory&cache=shared')...
+Found 19 test(s).
+Operations to perform:
+  Synchronize unmigrated apps: messages, staticfiles
+  Apply all migrations: admin, auth, contenttypes, djangoapp, sessions
+Synchronizing apps without migrations:
+  Creating tables...
+    Running deferred SQL...
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying admin.0003_logentry_add_action_flag_choices... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying auth.0009_alter_user_last_name_max_length... OK
+  Applying auth.0010_alter_group_name_max_length... OK
+  Applying auth.0011_update_proxy_permissions... OK
+  Applying auth.0012_alter_user_first_name_max_length... OK
+  Applying djangoapp.0001_initial... OK
+  Applying djangoapp.0002_carmodel_dealer_id... OK
+  Applying sessions.0001_initial...test_csrf_required (djangoapp.tests.AccountTests.test_csrf_required) ... /workspace/shared/ibm-projects/capstone/.venv/lib/python3.12/site-packages/django/core/handlers/base.py:61: UserWarning: No directory at: /workspace/shared/ibm-projects/capstone/app/server/static/
+  mw_instance = middleware(adapted_handler)
+ok
+test_duplicate_registration (djangoapp.tests.AccountTests.test_duplicate_registration) ... ok
+test_get_logout_does_not_mutate_session (djangoapp.tests.AccountTests.test_get_logout_does_not_mutate_session) ... ok
+test_invalid_login (djangoapp.tests.AccountTests.test_invalid_login) ... ok
+test_malformed_json (djangoapp.tests.AccountTests.test_malformed_json) ... ok
+test_registration_rejects_long_name (djangoapp.tests.AccountTests.test_registration_rejects_long_name) ... ok
+test_registration_rejects_mismatched_password (djangoapp.tests.AccountTests.test_registration_rejects_mismatched_password) ... ok
+test_registration_rejects_weak_password_and_bad_email (djangoapp.tests.AccountTests.test_registration_rejects_weak_password_and_bad_email) ... ok
+test_registration_session_logout_login (djangoapp.tests.AccountTests.test_registration_session_logout_login) ... ok
+test_anonymous_review_denied (djangoapp.tests.DealerTests.test_anonymous_review_denied) ... ok
+test_car_models_and_admin (djangoapp.tests.DealerTests.test_car_models_and_admin) ... ok
+test_dealers_and_state (djangoapp.tests.DealerTests.test_dealers_and_state) ... ok
+test_missing_dealer (djangoapp.tests.DealerTests.test_missing_dealer) ... ok
+test_purchase_validation (djangoapp.tests.DealerTests.test_purchase_validation) ... ok
+test_review_author_comes_from_session (djangoapp.tests.DealerTests.test_review_author_comes_from_session) ... ok
+test_review_requires_string (djangoapp.tests.DealerTests.test_review_requires_string) ... ok
+test_review_sentiment (djangoapp.tests.DealerTests.test_review_sentiment) ... ok
+test_service_unavailable (djangoapp.tests.DealerTests.test_service_unavailable) ... ok
+test_static_and_react_routes (djangoapp.tests.DealerTests.test_static_and_react_routes) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 0.972s
+
+OK
+Destroying test database for alias 'default' ('file:memorydb_default?mode=memory&cache=shared')...
+ OK
+System check identified no issues (0 silenced).

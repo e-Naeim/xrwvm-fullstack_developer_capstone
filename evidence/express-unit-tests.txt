@@ -1,0 +1,23 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> dealership-database-service@1.0.0 test
+> node --test tests/*.test.js
+
+✔ API health (16.980696ms)
+✔ all dealerships (4.092676ms)
+✔ Kansas dealership filter (2.909017ms)
+✔ All state removes filter (2.436603ms)
+✔ single dealer (2.485146ms)
+✔ invalid dealership id (2.023058ms)
+✔ dealer reviews newest first (1.854242ms)
+✔ review validation (9.581923ms)
+test failure
+✔ backend failure returns controlled 500 (4.357185ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 482.100073
